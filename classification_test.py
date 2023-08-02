@@ -85,7 +85,7 @@ for epoch in range(num_epoch):
 
         running_loss += once_loss.item()
         if i%2000 == 1999:
-            print(f'<epoch: {epoch+1}, batch: {i+1}> - loss={running_loss/2000}% ')
+            print(f'<epoch: {epoch+1}, batch: {i+1}> - loss={running_loss/2000:.3f} ')
             running_loss = 0.0
 
 #* --------------------------------- model save
@@ -120,17 +120,13 @@ with torch.no_grad():
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
         for i in range(batch_size):
-            if labels(i) == predicted(i):
-                correct_class[classes[labels[i]]]+=1
-            total_class[classes[labels[i]]]+=1
+            if (list(labels)[i].item() == list(predicted)[i].item()):
+                correct_class[classes[list(labels)[i].item()]]+=1
+            total_class[classes[list(labels)[i].item()]]+=1
+
 
 for i in range(len(classes)):
-    accuracy = correct_class[i] / total_class[i] * 100
+    accuracy = correct_class[classes[i]] / total_class[classes[i]] * 100
     print(f'Accuracy of {classes[i]}: {accuracy}%')
           
 print(f'Accuracy of the network on the {total} test images: {correct/total*100:.1f}%')
-
-    
-
-
-
